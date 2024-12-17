@@ -204,7 +204,6 @@
     <menuitem id="pos_pos_ordenes" name="🛎️ Ordenes" parent="pos_pos" action="point_of_sale.action_report_pos_order_all" sequence="4"/>
     <menuitem id="pos_pos_detalles" name="📋 Detalle de Ventas" parent="pos_pos" action="point_of_sale.action_report_pos_details" sequence="5"/>
     <menuitem id="pos_pos_reporte" name="📝 Reporte de Sesión" parent="pos_pos" action="point_of_sale.action_report_pos_daily_sales_reports" sequence="6"/>
-    <menuitem id="pos_printer" name="🖨️ Impresoras de Preparación" parent="pos_pos" action="point_of_sale.action_pos_printer_form" sequence="7"/>
     <menuitem id="pos_taxes" name="🧾 Impuestos" parent="pos_pos" action="account.action_tax_form" sequence="8"/>
     <menuitem id="pos_coins" name="🪙 Monedas y Billetes" parent="pos_pos" action="point_of_sale.action_pos_bill" sequence="9"/>
 
