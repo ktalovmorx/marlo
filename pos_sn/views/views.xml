@@ -1,0 +1,268 @@
+<odoo>
+
+  <!-- VIEW VISIBILIDAD DE PRODUCTOS-->
+  <data>
+    <record id="view_pos_sn_pos_sn_list" model="ir.ui.view">
+      <field name="name">pos.sn.pos.sn.list</field>
+      <field name="model">pos_sn.pos_sn</field>
+      <field name="arch" type="xml">
+          <tree editable="bottom">
+              <header>
+                <button name="action_generate_records" type="object" string="Publicar" class="btn-warning"/>
+              </header>
+              <field name="product_id"/>
+              <field name="available_in_pos"/>
+              <field name="available_in_ecommerce"/>
+              <field name="available_in_autopedido"/>
+              <!--button name="action_generate_records" type="object" string="Cargar" class="btn-primary"/-->
+          </tree>
+      </field>
+    </record>
+    <record id="action_generate_records" model="ir.actions.server">
+      <field name="name">Cargar Productos</field>
+      <field name="model_id" ref="model_pos_sn_pos_sn"/>
+      <field name="state">code</field>
+      <field name="code">model.action_generate_records()</field>
+    </record>
+  </data>
+
+  <!-- VIEW GASTOS -->
+  <data>
+    <record id="view_gastos_model_list" model="ir.ui.view">
+      <field name="name">gastos.model.list</field>
+      <field name="model">gastos.model</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="user" widget="many2one_avatar_user"/>
+          <field name="currency"/>
+          <field name="amount"/>
+          <field name="transaction_datetime"/>
+          <field name="cause"/>
+          <field name="comment"/>
+          <field name="company"/>
+        </tree>
+      </field>
+    </record>
+    <record id="view_gastos_model_form" model="ir.ui.view">
+      <field name="name">gastos.model.form</field>
+      <field name="model">gastos.model</field>
+      <field name="arch" type="xml">
+        <form>
+          <header></header>
+          <sheet>
+            <group>
+              <group>
+                <field name="name"/>
+                <field name="transaction_datetime"/>
+                <field name="cause"/>
+                <field name="comment"/>
+              </group>
+              <group>
+                <group>
+                  <field name="currency"/>
+                  <field name="amount"/>
+                  <field name="company"/>
+                  <field name="user" widget="many2one_avatar_user"/>
+                </group>
+              </group>
+            </group>
+            <notebook>
+              <page name="page_attachments" string="🗂️ Documentos">
+                <field name="attachments" widget="attachments"/>
+              </page>
+            </notebook>
+          </sheet>
+        </form>
+      </field>
+    </record>
+    <!-- AGREGAR BOTON PARA RECONOCIMIENTO DE VOZ AL FORMULARIO -->
+    <record id="view_gastos_model_form_inherit_voice" model="ir.ui.view">
+      <field name="name">view.gastos.model.form.inherit.voice</field>
+      <field name="model">gastos.model</field>
+      <field name="inherit_id" ref="pos_sn.view_gastos_model_form"/>
+      <field name="arch" type="xml">
+          <xpath expr="//field[@name='comment']" position="after">
+            <span class="btn btn-lg btn-light" onclick="start_recognition('comment_0')">🎙️</span>
+          </xpath>
+      </field>
+    </record>
+  </data>
+
+  <!-- VIEW CAPITAL -->
+  <data>
+    <record id="view_base_capital_model_list" model="ir.ui.view">
+      <field name="name">base.capital.model.list</field>
+      <field name="model">base.capital.model</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="currency"/>
+          <field name="amount"/>
+          <field name="company"/>
+          <field name="transaction_datetime"/>
+          <field name="status" decoration-success="status=='Registrado'" widget="badge"/>
+        </tree>
+      </field>
+    </record>
+    <record id="view_base_capital_model_form" model="ir.ui.view">
+      <field name="name">base.capital.model.form</field>
+      <field name="model">base.capital.model</field>
+      <field name="arch" type="xml">
+        <form>
+          <header></header>
+          <sheet>
+            <group>
+              <group>
+                <field name="name"/>
+                <field name="transaction_datetime"/>
+                <field name="comment"/>
+              </group>
+              <group>
+                <group>
+                  <field name="currency"/>
+                  <field name="amount"/>
+                  <field name="company"/>
+                </group>
+              </group>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+    <!-- AGREGAR BOTON PARA RECONOCIMIENTO DE VOZ AL FORMULARIO -->
+    <record id="view_base_capital_model_form_inherit_voice" model="ir.ui.view">
+      <field name="name">view.base.capital.model.form.inherit.voice</field>
+      <field name="model">base.capital.model</field>
+      <field name="inherit_id" ref="pos_sn.view_base_capital_model_form"/>
+      <field name="arch" type="xml">
+          <xpath expr="//field[@name='comment']" position="after">
+            <span class="btn btn-lg btn-light" onclick="start_recognition('comment_0')">🎙️</span>
+          </xpath>
+      </field>
+    </record>
+  </data>
+
+  <!-- VIEW RETIROS -->
+  <data>
+    <record id="view_retire_model_list" model="ir.ui.view">
+      <field name="name">retire.model.list</field>
+      <field name="model">retire.model</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="company"/>
+          <field name="currency"/>
+          <field name="amount"/>
+          <field name="open_datetime"/>
+          <field name="close_datetime"/>
+          <field name="status" decoration-danger="status=='retired'" decoration-success="status=='returned'" widget="badge"/>
+        </tree>
+      </field>
+    </record>
+    <record id="view_retire_model_form"  model="ir.ui.view">
+      <field name="name">retire.model.form</field>
+      <field name="model">retire.model</field>
+      <field name="arch" type="xml">
+        <form>
+          <header>
+            <field name="status" widget="statusbar"></field>
+          </header>
+          <sheet>
+            <group>
+              <field name="name"/>
+              <field name="comment"/>
+            </group>
+            <group>
+              <group>
+                <field name="currency" readonly="status == 'returned'"/>
+                <field name="amount" readonly="status == 'returned'"/>
+                <field name="company"/>
+              </group>
+              <group>
+                <field name="open_datetime"/>
+                <field name="close_datetime"/>
+                <field name="status" readonly="status == 'returned'"/>
+              </group>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+  </data>
+
+  <!-- MENU APLICACION -->
+  <data>
+    <!-- MENU RAIZ -->
+    <menuitem id="menu_root" name="📲 Restaurante" action="point_of_sale.action_pos_config_kanban" sequence="1"/>
+
+    <!-- POS -->
+    <menuitem id="pos_pos" name="📇 POS" parent="menu_root" sequence="2"/>
+    <menuitem id="pos_tablero" name="🏪 POS" parent="pos_pos" action="point_of_sale.action_pos_config_kanban" sequence="1"/>
+    <menuitem id="pos_pos_sesiones" name="💾 Sesiones" parent="pos_pos" action="point_of_sale.action_pos_session" sequence="2"/>
+    <menuitem id="pos_pos_pagos" name="💵 Pagos" parent="pos_pos" action="point_of_sale.action_pos_payment_form" sequence="3"/>
+    <menuitem id="pos_pos_ordenes" name="🛎️ Ordenes" parent="pos_pos" action="point_of_sale.action_report_pos_order_all" sequence="4"/>
+    <menuitem id="pos_pos_detalles" name="📋 Detalle de Ventas" parent="pos_pos" action="point_of_sale.action_report_pos_details" sequence="5"/>
+    <menuitem id="pos_pos_reporte" name="📝 Reporte de Sesión" parent="pos_pos" action="point_of_sale.action_report_pos_daily_sales_reports" sequence="6"/>
+    <menuitem id="pos_printer" name="🖨️ Impresoras de Preparación" parent="pos_pos" action="point_of_sale.action_pos_printer_form" sequence="7"/>
+    <menuitem id="pos_taxes" name="🧾 Impuestos" parent="pos_pos" action="account.action_tax_form" sequence="8"/>
+    <menuitem id="pos_coins" name="🪙 Monedas y Billetes" parent="pos_pos" action="point_of_sale.action_pos_bill" sequence="9"/>
+
+    <!-- RESTAURANTE -->
+    <menuitem id="pos_restaurant" name="👨‍🍳 Restaurante" parent="menu_root" sequence="3"/>
+    <menuitem id="pos_comandas" name="🥘 Comandas" parent="pos_restaurant" action="action_redirect_to_comandas" sequence="1"/>
+    <menuitem id="pos_pedidos" name="🛒 Pedidos" parent="pos_restaurant" action="action_redirect_to_viewer" sequence="2"/>
+    <menuitem id="pos_cocina" name="👩‍🍳 Cocina" parent="pos_restaurant" action="action_redirect_to_kitchen" sequence="3"/>
+    <menuitem id="pos_despacho" name="🚚 Despacho" parent="pos_restaurant" action="action_redirect_to_dispatch" sequence="4"/>
+
+    <!-- FABRICACION -->
+    <menuitem id="fabricacion_menu" name="🛠️ Fabricación" parent="menu_root" sequence="4"/>
+    <menuitem id="fabricacion_menu_1_1" name="🔩 Fabricación" parent="fabricacion_menu" action="mrp.mrp_production_action" sequence="1"/>
+    <menuitem id="fabricacion_menu_1_2" name="🚚 Productos" parent="fabricacion_menu" action="action_inherit_productos" sequence="2"/>
+    <menuitem id="fabricacion_menu_1_3" name="🎨 Lista de Materiales (BOM)" parent="fabricacion_menu" action="mrp.mrp_bom_form_action" sequence="3"/>
+    <menuitem id="fabricacion_menu_1_4" name="🛰️ Ubicaciones" parent="fabricacion_menu" action="stock.action_location_form" sequence="4"/>
+    <menuitem id="fabricacion_menu_1_5" name="🛫 Rutas" parent="fabricacion_menu" action="stock.action_routes_form" sequence="5"/>
+    <menuitem id="fabricacion_menu_1_6" name="💼 Almacenes" parent="fabricacion_menu" action="stock.action_warehouse_form" sequence="6"/>
+    <menuitem id="fabricacion_menu_1_7" name="💾 Reglas de Almacenamiento" parent="fabricacion_menu" action="stock.action_putaway_tree" sequence="7"/>
+    <menuitem id="fabricacion_menu_1_8" name="🔋 Reglas de Reabastecimiento" parent="fabricacion_menu" action="stock.action_orderpoint" sequence="8"/>
+
+    <!-- PRODUCTOS -->
+    <menuitem id="pos_menu_1" name="📦 Productos" parent="menu_root" sequence="5"/>
+    <menuitem id="pos_menu_1_1" name="🚚 Productos" parent="pos_menu_1" action="action_inherit_productos" sequence="1"/>
+    <menuitem id="pos_menu_1_2" name="🔠 Set de productos" parent="pos_menu_1" action="action_inherit_set_productos" sequence="2"/>
+    <menuitem id="pos_menu_1_3" name="🗂️ Categorías de Productos" parent="pos_menu_1" action="product.product_category_action_form" sequence="3"/>
+    <menuitem id="pos_menu_1_4" name="🗂️ Categorías PTV" parent="pos_menu_1" action="point_of_sale.product_pos_category_action" sequence="4"/>
+    <menuitem id="pos_menu_1_5" name="🗂️ Categorías Web" parent="pos_menu_1" action="website_sale.product_public_category_action" sequence="5"/>
+    <menuitem id="pos_menu_1_6" name="🔠 Atributos de Productos" parent="pos_menu_1" action="product.attribute_action" sequence="6"/>
+    <menuitem id="pos_menu_1_7" name="🌎 Publicaciones" parent="pos_menu_1" action="action_inherit_product_visibility" sequence="7"/>
+
+    <!-- COMERCIOS -->
+    <menuitem id="pos_comercios" name="🫱🏿‍🫲🏽 Comercios" parent="menu_root" sequence="6"/>
+      <!-- ORDENES DE COMPRA -->
+    <menuitem id="pos_menu_2" name="🛍️ Compras" parent="pos_comercios" sequence="1"/>
+    <menuitem id="pos_menu_2_1" name="🛍️ Compras y Cotizaciones" parent="pos_menu_2" action="action_inherit_purchase_order" sequence="1"/>
+      <!-- ORDENES DE VENTA -->
+    <menuitem id="pos_ventas" name="🛍️ Ventas y Cotizaciones" parent="pos_comercios" action="action_inherit_sale_order" sequence="2"/>
+    <!-- PAGOS Y METODOS DE PAGO-->
+    <menuitem id="pos_metodos_pago" name="💳 Métodos de Pago" parent="pos_comercios" action="action_payment_method" sequence="3"/>
+    <menuitem id="pos_metodos_pago_pos" name="💳 Métodos de Pago PTV" parent="pos_comercios" action="point_of_sale.action_payment_methods_tree" sequence="4"/>
+    <menuitem id="pos_proveedores_pago" name="🏦 Proveedores de Pago" parent="pos_comercios" action="action_payment_provider" sequence="5"/>
+    <menuitem id="pos_transacciones" name="🏧 Transacciones" parent="pos_comercios" action="action_transactions" sequence="6"/>
+    <!-- EXISTENCIAS -->
+    <menuitem id="existencia_menu_1_1" name="📦 Existencias" parent="pos_comercios" action="stock.action_product_stock_view" sequence="6"/>
+    <menuitem id="existencia_menu_1_2" name="⌛ Pendientes" parent="pos_comercios" action="action_pendiente_entrega" sequence="7"/>
+
+    <!-- USUARIOS -->
+    <menuitem id="pos_usuarios" name="🚹 Usuarios" parent="menu_root" action="action_inherit_productos" sequence="7"/>
+    <menuitem id="pos_usuarios_1" name="🙋🏻‍♂️ Clientes" parent="pos_usuarios" action="action_inherit_contactos_cliente" sequence="1"/>
+    <menuitem id="pos_usuarios_2" name="👨‍💼 Empleados" parent="pos_usuarios" action="action_inherit_contactos_empleado" sequence="2"/>
+    <menuitem id="pos_usuarios_3" name="🧑🏻‍💻 Administradores" parent="pos_usuarios" action="action_inherit_contactos_administrador" sequence="3"/>
+    <menuitem id="pos_usuarios_4" name="👨‍💼 Proveedores" parent="pos_usuarios" action="account.res_partner_action_supplier" sequence="4"/>
+    <menuitem id="pos_usuarios_5" name="🕵 Todos" parent="pos_usuarios" action="contacts.action_contacts" sequence="5"/>
+
+    <!-- CONVERSACIONES -->
+    <menuitem id="pos_chat" name="📬 Mensajería" parent="menu_root" sequence="8"/>
+    <menuitem id="inner_chat" name="📩 Chat" parent="pos_chat" action="mail.action_discuss" sequence="1"/>
+
+  </data>
+</odoo>

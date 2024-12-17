@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="report_1" model="ir.actions.report">
+            <field name="name">SN | NCF Ticket</field>
+            <field name="model">ncf.model</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">marlo_sn.ncf_ticket_template</field>
+            <field name="paperformat_id" ref="marlo_sn.ncf_ticket"/>
+            <!-- Formato de nombre con que se guardara el archivo resultante-->
+            <field name="print_report_name">'NCF_TICKET_%s' % object.name</field>
+        </record>
+    </data>
+    <data>
+        <record id="report_1" model="ir.actions.report">
+            <field name="name">SN | MINI Ticket</field>
+            <field name="model">sale.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">marlo_sn.mini_factura_cliente</field>
+            <field name="paperformat_id" ref="marlo_sn.mini_ticket"/>
+            <!-- Formato de nombre con que se guardara el archivo resultante-->
+            <field name="print_report_name">'MINI_TICKET_%s' % object.name</field>
+        </record>
+    </data>
+</odoo>

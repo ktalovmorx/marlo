@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- CAMBIA TEXTO EMAIL POR USUARIO EN EL LOGIN-->
+    <data>
+        <template id="custom_web_login" inherit_id="web.login">
+            <xpath expr="//label[@for='login']" position="replace">
+                <label for="login" class="control-label">Usuario</label>
+            </xpath>
+            <xpath expr="//input[@id='login']" position="attributes">
+                <attribute name="placeholder">Usuario</attribute>
+            </xpath>
+        </template>
+    </data>
+
+    <!-- AGREGAR CAMPO MARGIN EN SALE.ORDER -->
+    <data>
+        <record id="view_order_tree_inherit_margin" model="ir.ui.view">
+            <field name="name">sale.order.tree.inherit.margin</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='amount_total']" position="after">
+                    <field name="margin"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+
+    <!-- AGREGAR CAMPO MARGIN EN SALE.ORDER.LINE -->
+     <data>
+        <record id="view_order_form_inherit" model="ir.ui.view">
+            <field name="name">sale.order.line.form.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="after">
+                    <field name="margin"/>
+                </xpath>
+            </field>
+        </record>
+     </data>
+
+    <!-- HERENCIA RES.PARTNER -->
+    <data>
+        <record id="view_ncfsn_res_partner_inherit_form" model="ir.ui.view">
+            <field name="name">ncfsn.res.partner.inherit.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='vat']" position="after">
+                    <field name="user_type"/>
+                    <field name="dni_card"/>
+                    <field name="passport_id"/>
+                    <field name="license_id"/>
+                    <field name="user_card"/>
+                    <field name="card_barcode"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+
+    <!-- HERENCIA RES.PARTNER PARA AGRUPAR POR TIPO-->
+    <data>
+        <record id="view_res_partner_search_inherit" model="ir.ui.view">
+            <field name="name">res.partner.search.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter"/>
+            <field name="arch" type="xml">
+                <search>
+                    <filter string="🗂️ Agrupar por Tipo" name="group_by_tipo" context="{'group_by':'user_type'}"/>
+                </search>
+            </field>
+        </record>
+    </data>
+
+    <!-- HERECIA ACCOUNT.ACCOUNT -->
+    <data>
+        <record id="view_account_form_inherited" model="ir.ui.view">
+            <field name="name">view.account.form.inherited</field>
+            <field name="model">account.account</field>
+            <field name="inherit_id" ref="account.view_account_form"/>
+            <field name="arch" type="xml">
+                <field name="currency_id" position="after">
+                    <field name="sale_tax_type" />
+                </field>
+            </field>
+        </record>
+    </data>
+    
+    <!-- CUSTOMIZAR MENSAJE DE PAGINA DE SOPORTE EN CHAT EN VIVO-->
+    <data>
+        <!-- C:\odoo17\server\odoo\addons\im_livechat\views\im_livechat_channel_templates.xml -->
+        <template id="livechat_support_page_inherit" inherit_id="im_livechat.support_page">
+            <xpath expr="//div[@class='main']" position="replace">
+                <h1 class="channel_name"><t t-esc="channel.name"/></h1>
+                <div>Website Live Chat Powered by <strong>Marlo</strong>.</div>
+            </xpath>
+        </template>
+    </data>
+
+</odoo>

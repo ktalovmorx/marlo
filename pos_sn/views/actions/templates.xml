@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- REDIRECCIONAR A COMANDAS -->
+    <data>
+        <!-- Define the URL action -->
+        <record id="action_redirect_to_comandas" model="ir.actions.act_url">
+            <field name="name">redirect_to_comandas</field>
+            <field name="url">/comandas</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+
+    <!-- REDIRECCIONAR A VIEWER-->
+    <data>
+        <!-- Define the URL action -->
+        <record id="action_redirect_to_viewer" model="ir.actions.act_url">
+            <field name="name">redirect_to_viewer</field>
+            <field name="url">/viewer</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+
+    <!-- REDIRECCIONAR A KITCHEN-->
+    <data>
+        <!-- Define the URL action -->
+        <record id="action_redirect_to_kitchen" model="ir.actions.act_url">
+            <field name="name">redirect_to_kitchen</field>
+            <field name="url">/kitchen</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+
+    <!-- REDIRECCIONAR A DISPATCH-->
+    <data>
+        <!-- Define the URL action -->
+        <record id="action_redirect_to_dispatch" model="ir.actions.act_url">
+            <field name="name">redirect_to_dispatch</field>
+            <field name="url">/dispatch</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+
+    <!-- ACTION METODOS DE PAGO-->
+    <data>
+        <record id="action_payment_method" model="ir.actions.act_window">
+            <field name="name">💳 Métodos de Pago</field>
+            <field name="res_model">payment.method</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="help" type="html">
+                <img src="/marlo_sn/static/description/icon.png" alt="Logo" style="width: 150px; height: auto;"/><br/>
+                <p class="oe_view_nocontent_create">
+                   Registre un nuevo método de pago
+                </p>
+            </field>
+        </record>
+     </data>
+
+    <!-- ACTION PROVEEDORES DE PAGO-->
+    <data>
+        <record id="action_payment_provider" model="ir.actions.act_window">
+            <field name="name">🏦 Proveedores de Pago</field>
+            <field name="res_model">payment.provider</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="help" type="html">
+                <img src="/marlo_sn/static/description/icon.png" alt="Logo" style="width: 150px; height: auto;"/><br/>
+                <p class="oe_view_nocontent_create">
+                   Registre un nuevo proveedor de pagos
+                </p>
+            </field>
+        </record>
+     </data>
+
+    <!-- TRANSACCIONES -->
+    <data>
+        <record id="action_transactions" model="ir.actions.act_window">
+            <field name="name">💱 Transacciones</field>
+            <field name="res_model">payment.transaction</field>
+            <field name="view_mode">tree,form,kanban</field>
+            <field name="help" type="html">
+                <img src="/marlo_sn/static/description/icon.png" alt="Logo" style="width: 150px; height: auto;"/><br/>
+                <p class="oe_view_nocontent_create">
+                    No hay transacciones registradas
+                </p>
+            </field>
+        </record>
+     </data>
+     
+    <!-- ACTION ENTREGA PENDIENTE -->
+     <data>
+        <record id="action_pendiente_entrega" model="ir.actions.act_window">
+            <field name="name">Pendientes de entrega</field>
+            <field name="res_model">stock.picking</field>
+            <field name="view_mode">tree,form,kanban</field>
+            <field name="domain">[('state', '=', 'assigned')]</field>
+        </record>
+     </data>
+
+    <!-- ACTION PRODUCTOS -->
+    <data>
+        <record id="action_inherit_productos" model="ir.actions.act_window">
+            <field name="name">📦 Productos</field>
+            <field name="res_model">product.template</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{'search_default_filter_to_availabe_pos': 1, 'default_available_in_pos': True, 'create_variant_never': 'no_variant'}</field>
+            <field name="help" type="html">
+                <img src="/marlo_sn/static/description/icon.png" alt="Logo" style="width: 150px; height: auto;"/><br/>
+                <p class="oe_view_nocontent_create">
+                    Cree y/o edite sus productos
+                </p>
+            </field>
+        </record>
+    </data>
+
+    <!-- ACTION SET PRODUCTOS -->
+    <data>
+        <record id="action_inherit_set_productos" model="ir.actions.act_window">
+            <field name="name">📦 Set de Productos</field>
+            <field name="res_model">pos.combo</field>
+            <field name="view_mode">kanban,tree,form</field>
+        </record>
+    </data>
+    
+    <!-- ORDENES DE COMPRA -->
+    <data>
+        <record id="action_inherit_purchase_order" model="ir.actions.act_window">
+            <field name="name">🛍️ Ordenes de Compra</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_mode">tree,form,kanban,pivot,graph</field>
+            <!--field name="domain">[('state', 'not in', ('cancel',))]</field-->
+            <field name="help" type="html">
+                <img src="/marlo_sn/static/description/icon.png" alt="Logo" style="width: 150px; height: auto;"/><br/>
+                <p class="oe_view_nocontent_create">
+                   Registre una nueva orden de compra
+                </p>
+            </field>
+        </record>
+    </data>
+
+    <!-- ORDENES DE VENTA -->
+    <data>
+        <record id="action_inherit_sale_order" model="ir.actions.act_window">
+            <field name="name">🛍️ Ventas</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">tree,form,kanban,pivot,graph</field>
+            <!--field name="domain">[('state', 'not in', ('cancel',))]</field-->
+            <field name="help" type="html">
+                <img src="/marlo_sn/static/description/icon.png" alt="Logo" style="width: 150px; height: auto;"/><br/>
+                <p class="oe_view_nocontent_create">
+                   Registre una nueva orden de venta
+                </p>
+            </field>
+        </record>
+    </data>
+
+    <!-- ACTION CLIENTES -->
+    <data>
+        <record id="action_inherit_contactos_cliente" model="ir.actions.act_window">
+            <field name="name">🙋🏻‍♂️ Clientes</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">kanban,form,tree</field>
+            <field name="domain">[('user_type', '=', 'cliente')]</field>
+            <field name="context">{'default_user_type': 'cliente'}</field>
+            <field name="help" type="html">
+                <img src="/marlo_sn/static/description/icon.png" alt="Logo" style="width: 150px; height: auto;"/><br/>
+                <p class="oe_view_nocontent_create">
+                    Agregue un nuevo cliente
+                </p>
+            </field>
+        </record>
+    </data>
+
+    <!-- ACTION EMPLEADOS -->
+    <data>
+        <record id="action_inherit_contactos_empleado" model="ir.actions.act_window">
+            <field name="name">👨‍💻 Empleados</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">kanban,form,tree</field>
+            <field name="domain">[('user_type', '=', 'empleado')]</field>
+            <field name="context">{'default_user_type': 'empleado'}</field>
+            <field name="help" type="html">
+                <img src="/marlo_sn/static/description/icon.png" alt="Logo" style="width: 150px; height: auto;"/><br/>
+                <p class="oe_view_nocontent_create">
+                    Agregue un nuevo empleado
+                </p>
+            </field>
+        </record>
+    </data>
+
+    <!-- ACTION ADMINISTRADORES -->
+    <data>
+        <record id="action_inherit_contactos_administrador" model="ir.actions.act_window">
+            <field name="name">👨🏻‍💼 Administradores</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">kanban,form,tree</field>
+            <field name="domain">[('user_type', '=', 'administrador')]</field>
+            <field name="context">{'default_user_type': 'administrador'}</field>
+            <field name="help" type="html">
+                <img src="/marlo_sn/static/description/icon.png" alt="Logo" style="width: 150px; height: auto;"/><br/>
+                <p class="oe_view_nocontent_create">
+                    Agregue un nuevo administrador
+                </p>
+            </field>
+        </record>
+    </data>
+    
+    <!-- VISIBILIDAD DE PRODUCTOS -->
+    <data>
+        <record id="action_inherit_product_visibility" model="ir.actions.act_window">
+            <field name="name">🌍 Visibilidad</field>
+            <field name="res_model">ptv_sn.ptv_sn</field>
+            <field name="view_mode">tree</field>
+            <field name="help" type="html">
+                <img src="/marlo_sn/static/description/icon.png" alt="Logo" style="width: 150px; height: auto;"/><br/>
+                <p class="oe_view_nocontent_create">
+                    Configure la visualización de productos a su público (Ptv, Web, Autoservicio).
+                </p>
+            </field>
+        </record>
+    </data>
+
+</odoo>

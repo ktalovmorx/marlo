@@ -1,0 +1,745 @@
+<odoo>
+  
+    <data>
+      <!-- Actualiza el REPORT_LAYOUT , con class="container-fluid" y estilos -->
+      <template id="report_layout_updater" inherit_id="web.report_layout">
+        <xpath expr="//body" position="replace">
+            <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900" />
+            <body t-att-class="'container-fluid'" t-att-dir="env['res.lang']._lang_get(lang or env.user.lang).direction or 'ltr'" style="padding:10px !important;background-size: cover !important;background-attachment: fixed !important;background-color: var(--homeMenu-bg-color, #e7e9ed) !important;background-image: var(--homeMenu-bg-image, url(/marlo_sn/static/src/images/textura_pngtree1.png)) !important;">
+              <div id="wrapwrap">
+                <main>
+                    <t t-out="0"/>
+                </main>
+              </div>
+            </body>
+        </xpath>
+      </template>
+    </data>
+
+    <!-- TICKET CLIENTE -->
+    <data>
+      <template id="factura_cliente">
+        <t t-call="web.html_container">
+            <!--t t-call="web.external_layout"-->
+            <t t-foreach="docs" t-as="doc">
+                <div class="page">
+                    <div class="header" style="display:flex;flex-direction:row;">
+                        <img t-att-src="'/pos_sn/static/description/company_logo.png'" style="margin-left:35%;margin-top:15px;margin-bottom:15px" width="80" height="80"/>
+                    </div>
+                    <div style="height:70px"></div>
+                    <div class="body" style="margin-top:15px;display:flex;flex-direction:column;text-align:center">
+                        <div class="container-fluid">
+                            <strong class="text-center">__</strong>
+                        </div>
+                        <div class="container-fluid">
+                            <strong class="text-center"><t t-esc="user.company_id.name"/></strong>
+                        </div>
+                        <div class="container-fluid">
+                            <span class="text-center"><t t-esc="user.company_id.street"/></span>
+                        </div>
+                        <!--div class="container-fluid">
+                            <span class="text-center"><t t-esc="user.company_id.city"/>, <t t-esc="user.company_id.state_id.name"/></span>
+                        </div-->
+                        <!--div class="container-fluid">
+                            <span class="text-center"><t t-esc="user.company_id.country_id.name"/></span>
+                        </div-->
+                        <div class="container-fluid">
+                            <span class="text-center"><t t-esc="user.company_id.phone"/></span>
+                        </div>
+                        <div class="container-fluid">
+                            <span class="text-left"><t t-esc="doc.validity_date"/></span>
+                        </div>
+                        <div class="container-fluid">
+                            <span>Ticket # <span t-esc="doc.id"/></span>
+                        </div>
+                        <div class="container-fluid" style="border-top: 1px double #000;border-bottom: 1px double #000;margin-top:25px;margin-bottom:10px">
+                            <span class="text-center">Detalle de compras</span>
+                        </div>
+                        <div class="container-fluid" style="margin-top:25px">
+                            <table class="table" style='width:100%'>
+                                <thead>
+                                    <tr>
+                                        <th style="text-align:left;">Producto</th>
+                                        <th style="text-align:left;">Cantidad</th>
+                                        <th style="text-align:left;">Precio</th>
+                                        <th style="text-align:left;">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-set="grand_total" t-value="0"/>
+                                    <t t-foreach="doc.order_line" t-as="line">
+                                        <t t-set="grand_total" t-value="grand_total + line.price_subtotal"/>
+                                        <tr>
+                                            <td style="text-align:left;font-size:12px"><span t-esc="line.product_id.name"/></td>
+                                            <td style="text-align:left;font-size:12px"><span t-esc="line.product_qty"/></td>
+                                            <td style="text-align:left;font-size:12px"><span t-esc="line.price_unit"/></td>
+                                            <td style="text-align:left;font-size:12px"><span t-esc="line.price_subtotal"/></td>
+                                        </tr>
+                                    </t>
+                                    <tr></tr>
+                                    <tr>
+                                        <td colspan="3" style="text-align:left; border: 1px dashed #000;"><strong>Total</strong></td>
+                                        <td style="text-align:left; border: 1px dashed #000;"><strong><span t-esc="grand_total"/></strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="container-fluid" style="text-align:center;margin-top:25px">
+                            <span>Gracias por preferirnos!</span>
+                        </div>
+                    </div>
+                </div>
+            </t>
+            <!--/t-->
+        </t>
+      </template>
+    </data>
+
+    <!-- REPORTE DE CUADRE -->
+    <data>
+      <template id="reporte_cuadre">
+        <t t-call="web.html_container">
+          <t t-foreach="docs" t-as="doc">
+              <div class="page" style="margin-top:15px;display:flex;flex-direction:row">
+                  <div class="header" style="display:flex;flex-direction:row;">
+                      <img t-att-src="'/pos_sn/static/description/company_logo.png'" style="margin-left:35%;margin-top:15px;margin-bottom:15px" width="80" height="80"/>
+                  </div>
+                  <div style="height:70px"></div>
+                  <div class="body" style="margin-top:15px;display:flex;flex-direction:column;text-align:center">
+                      <div class="container-fluid">
+                          <strong class="text-center">__</strong>
+                      </div>
+                      <div class="container-fluid" style="margin-top: 10px;">
+                          <t t-set="current_date" t-value="time.strftime('%Y-%m-%d')"/>
+                          <p>Fecha del reporte: <span t-esc="current_date"/></p>
+                      </div>
+                      <div class="container-fluid">
+                          <span>Ticket # <span t-esc="doc.id"/></span>
+                      </div>
+                      <div class="container-fluid" style="border-top: 1px double #000;border-bottom: 1px double #000;margin-top:25px;margin-bottom:10px">
+                          <span class="text-center">Detalle de inventario</span>
+                      </div>
+                      <div class="container-fluid" style="margin-top:25px">
+                          <table class="table" style="border-collapse: collapse; width: 100%; border: 1px solid #ddd;">
+                              <thead>
+                                  <tr>
+                                      <th style="text-align:left;border: 1px solid #ddd;">Prod.</th>
+                                      <th style="text-align:left;border: 1px solid #ddd;">Disp.</th>
+                                      <th style="text-align:left;border: 1px solid #ddd;">Use</th>
+                                      <th style="text-align:left;border: 1px solid #ddd;">Out</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  <t t-set="sorted_products" t-value="docs.sorted(key=lambda p: (p.categ_id.name))"/>
+                                  <t t-set="last_checked" t-value=""/>
+                                  <t t-foreach="sorted_products" t-as="product">
+                                      <t t-if="product.categ_id.name != last_checked">
+                                          <tr>
+                                              <td colspan="4" style="font-weight: bold; text-align: left; border: 1px solid #ddd;">
+                                                  <span t-esc="product.categ_id.name"/>
+                                              </td>
+                                          </tr>
+                                      </t>
+                                      <t t-set="last_checked" t-value="product.categ_id.name"/>
+
+                                      <tr>
+                                          <td style="text-align:left;border: 1px solid #ddd;font-size:12px"><span t-esc="product.display_name"/></td>
+                                          <td style="text-align:left;border: 1px solid #ddd;"><span t-esc="product.qty_available"/></td>
+                                          <td style="text-align:left;border: 1px solid #ddd;"><span t-esc="product.free_qty"/></td>
+                                          <td style="text-align:left;border: 1px solid #ddd;"><span t-esc="product.outgoing_qty"/></td>
+                                      </tr>
+                                  </t>
+                              </tbody>
+                          </table>
+                      </div>
+                      <i style="font-size:14px;margin-top:20px">
+                          <br/>
+                          Los datos anteriores le muestran las existencias que deberían haber en sus almacenes
+                          basados en las ventas y compras reportadas. Asegúrese que no existan órdenes pendientes
+                          de entrega, de ser así complételas y regenere el reporte.
+                      </i>
+                  </div>
+              </div>
+          </t>
+        </t>
+      </template>
+    </data>
+      
+    <!-- PAGINA DE COMANDAS -->
+    <data>
+      <template id="comandas_ptv">
+        <t t-call="web.html_container">
+          <div class="container-fluid">
+            <button type="button" class="badge btn-primary btn-sm" style="font-weight:bold;width:100%;margin-top:5px">
+              <h1>COMANDAS</h1>
+            </button>
+            <div class="container-fluid" style="padding:0px">
+              <a class="btn btn-sm btn-primary" style="font-weight:bold;margin-top:5px;margin-bottom:5px" onclick="resfresh_page()">🔄</a>
+              <a class="btn btn-sm btn-primary" id="timer" style="font-weight:bold;margin-top:5px;margin-bottom:5px" onclick="resfresh_page()">⏱️</a>
+              <a class="btn btn-sm btn-primary" style="font-weight:bold;margin-top:5px;margin-bottom:5px" onclick="home_page()" title="Go Home">🌍</a>
+              
+              <!-- CREAR UN ESPACIO PARA CADA SESION DE PUNTO DE VENTA -->
+              <div t-foreach="sessions" t-as="sesion" style="display:flex;flex-flow: column wrap;justify-content:flex-start;text-align:center">
+                
+                <span class="badge" style="font-weight:bold;margin-bottom:5px;color:black">
+                  <t t-esc="sesion"/>
+                </span>
+                
+                <!-- CREAR COMANDAS DE LA SESION ACTUAL -->
+                <t t-foreach="sessions[sesion]" t-as="mesa">
+                  <div class='container-fluid'>
+                    <table class="table table-hover" style="border-style:dashed;border-width:2px;border-color:gray; opacity: 0.8;background-color:white !important;">
+                      <!--thead>
+                        <th>#</th>
+                        <th>prod.</th>
+                        <th>nota</th>
+                        <th></th>
+                      </thead-->
+                      <tbody>
+                        <!-- AGREGAR LOS PEDIDOS RELATIVOS A LA COMANDA -->
+                        <t t-foreach="sessions[sesion][mesa]" t-as="pedido">
+                          <t t-set="order_line" t-value="order_lines.search([('id', '=', pedido.id)], limit=1)"/>
+                          <t t-set="order_object" t-value="pedido.order_id"/>
+                          <tr>
+                            <td>
+                              <span style="font-weight:bold;font-family: 'Roboto';font-size: 0.8rem;">
+                                <t t-esc="pedido.product_qty"/>
+                              </span>
+                            </td>
+                            <td style="text-transform: lowercase;text-align:left">
+                              <span style="font-family: 'Roboto';font-size: 0.8rem;">
+                                <t t-esc="pedido.product_id.name"/>
+                              </span>
+                            </td>
+                            <td>
+                              <t t-if="order_line.customer_note">
+                                <span style="font-family: 'Roboto';font-size: 0.8rem;">
+                                  <t t-esc="order_line.customer_note"/>
+                                </span>
+                              </t>
+                              <t t-else="">
+                                <span>-</span>
+                              </t>
+                            </td>
+                            <td>
+                              <t t-if="order_line.order_line_done">
+                                <span class="badge bg-success rounded-pill" t-attf-onclick="downgrade_order_line({{pedido.id}})" style="cursor:pointer;border-color:black;border-style:solid;border-width:1px;font-family: 'Roboto';font-size: 0.7rem;"> R </span>
+                              </t>
+                              <t t-else="">
+                                <span class="badge bg-warning rounded-pill" t-attf-onclick="upgrade_order_line({{pedido.id}})" style="cursor:pointer;border-color:black;border-style:solid;border-width:1px;font-family: 'Roboto';font-size: 0.7rem;"> P </span>
+                              </t>                          
+                            </td>
+                          </tr>
+                        </t>
+                      </tbody>
+                      <caption>
+                        <button type="button" class="badge btn-primary btn-sm" style="font-weight:bold">
+                          <t t-esc="mesa"/>
+                        </button>
+                        <button type="button" class="badge btn-primary btn-sm" style="font-weight:bold">
+                          <t t-esc="order_object.ticket_code"/>
+                        </button>
+                        <button type="button" class="badge btn-warning btn-sm" t-attf-onclick="close_full_order({{order_object.id}})" style="font-weight:bold">
+                          Finalizar
+                        </button>
+                        <span style="font-size:10px;color:black;text-decoration:underline">
+                          <t t-esc="order_object.pos_reference"/>
+                        </span>
+                      </caption>
+                    </table>
+                  </div>
+                </t>
+              </div>
+            </div>
+          </div>
+
+          <script>
+            var tiempoRestante = 30;
+            document.title = "Comandas";
+            var contador = setInterval(function() {
+                document.getElementById('timer').innerText = tiempoRestante;
+                tiempoRestante--;
+                if (tiempoRestante === 0) {
+                    clearInterval(contador);
+                    window.location.reload();
+                }
+            }, 1000);
+
+            function home_page() {
+              window.location.href = '/';
+            };
+
+            function resfresh_page() {
+              window.location.reload();
+            };
+
+            function close_full_order(order_id){
+              p = confirm('Seguro que desea cerrar esta orden');
+              if (p){
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', `/close_full_order?order_id=${order_id}`, true);
+                xhr.onreadystatechange = function () {
+                  if (xhr.readyState === 4){
+                    if (xhr.status === 200) {
+                      setTimeout( resfresh_page, 1000);
+                    }
+                  }
+                };
+                xhr.send();
+              }
+            };
+
+            function upgrade_order_line(line_order_id){
+              var xhr = new XMLHttpRequest();
+              xhr.open('GET', `/upgrade_order_line?line_order_id=${line_order_id}`, true);
+              xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4){
+                  if (xhr.status === 200) {
+                    setTimeout( resfresh_page, 1000);
+                    //alert('Cambio enviado, presione OK para continuar');
+                    //console.log('Respuesta:', JSON.parse(xhr.responseText));
+                  }
+                }
+              };
+              xhr.send();
+            };
+
+            function downgrade_order_line(line_order_id){
+              var xhr = new XMLHttpRequest();
+              xhr.open('GET', `/downgrade_order_line?line_order_id=${line_order_id}`, true);
+              xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4){
+                  if (xhr.status === 200) {
+                    setTimeout( resfresh_page, 1000);
+                    //alert('Cambio enviado, presione OK para continuar');
+                    //console.log('Respuesta:', JSON.parse(xhr.responseText));
+                  }
+                }
+              };
+              xhr.send();
+            };
+          </script>
+        </t>
+      </template>
+    </data>
+    <data>
+      <template id="ptv_kitchen" name="template_ptv_kitchen">
+          <t t-call="web.html_container">
+              <button type="button" class="badge btn-primary btn-sm" style="font-weight:bold;width:100%;margin-top:5px">
+                  <h1>KITCHEN</h1>
+              </button>
+              <div class="container-fluid" style="padding:0px">
+                  <button type="button" class="badge btn-primary btn-sm" style="font-weight:bold;margin-top:5px;margin-bottom:5px" onclick="resfresh_page()" title="Refresh">REFRESH</button>
+                  <button type="button" class="badge btn-primary btn-sm" id="timer" style="font-weight:bold;margin-top:5px;margin-bottom:5px" onclick="resfresh_page()" title="Refresh"></button>
+                  <button type="button" class="badge btn-primary btn-sm" style="font-weight:bold;margin-top:5px;margin-bottom:5px" onclick="home_page()" title="Go Home">🌍</button>
+                  <div style="display:flex;flex-flow: row wrap;justify-content:flex-start">
+                    <div t-foreach="orders" t-as="order" style="align-self:flex-start;margin:3px;">
+                      <table class="table table-sm table-hover table-borderless table-warning" style="cursor:pointer;border-style:dashed;border-width:2px;border-color:gray; opacity: 0.8; min-height:170px;min-width:180px;">
+                        <caption style="background-color: #fff3cd;padding:3px;margin-top:3px;border-style:dashed;border-width:2px">
+                          <button type="button" class="badge btn-primary btn-sm" style="font-weight:bold">
+                            <t t-esc="order[1]"/>
+                          </button>
+                          <t t-if="order[2] == 'REQUIRED'">
+                            <button type="button" class="badge btn-danger btn-sm" style="font-weight:bold" disabled="disabled">
+                              <t t-esc="order[2]"/>
+                            </button>
+                          </t>
+                          <t t-if="order[2] == 'PREPARING'">
+                            <button type="button" class="badge btn-warning btn-sm" style="font-weight:bold" disabled="disabled">
+                              <t t-esc="order[2]"/>
+                            </button>
+                          </t>
+                          <t t-if="order[2] == 'RETURNED'">
+                            <button type="button" class="badge btn-dark btn-sm" style="font-weight:bold" disabled="disabled">
+                              <t t-esc="order[2]"/>
+                            </button>
+                          </t>
+                          <t t-if="order[2] == 'READY'">
+                            <button type="button" class="badge btn-info btn-sm" style="font-weight:bold" disabled="disabled">
+                              <t t-esc="order[2]"/>
+                            </button>
+                          </t>
+                          <t t-if="order[2] == 'DISPATCHED'">
+                            <button type="button" class="badge btn-success btn-sm" style="font-weight:bold" disabled="disabled">
+                              <t t-esc="order[2]"/>
+                            </button>
+                          </t>
+                          <t t-if="order[2] == 'ENDED'">
+                            <button type="button" class="badge btn-link btn-sm" style="font-weight:bold" disabled="disabled">
+                              <t t-esc="order[2]"/>
+                            </button>
+                          </t>
+                          <span class="badge bg-primary" style="cursor:pointer;border-color:black;font-size: 0.7rem;background-color: #71639e !important" title="Ubicación"> <t t-esc="order[5]"/> </span>
+                          <span class="btn btn-link text-left" style="width:100%;font-size: 0.7rem;text-align:left;padding:0px" > <t t-esc="order[4]"/> </span>
+                          <div style="display:flex;flex-flow: row wrap;justify-content:space-evenly">
+                            <span class="badge bg-danger rounded-pill" t-attf-onclick="previous_stage({{order[0]}})" style="width:50%;cursor:pointer;font-size: 0.7rem;border-color:black;border-style:solid;border-width:1px"> Anterior </span>
+                            <span class="badge bg-success rounded-pill" t-attf-onclick="next_stage({{order[0]}})" style="width:50%;cursor:pointer;font-size: 0.7rem;border-color:black;border-style:solid;border-width:1px"> Siguiente </span>
+                          </div>
+                        </caption>
+                        <tbody>
+                          <t t-foreach="order[3]" t-as="pedido">
+                            <tr>
+                              <td>
+                                <span class="badge bg-primary rounded-pill" style="font-size: 0.8rem;">
+                                  <t t-esc="int(pedido.product_qty)"/>
+                                </span>
+                              </td>
+                              <td>
+                                <span style="font-family: 'Roboto';font-size: 0.8rem;">
+                                  <t t-esc="pedido.name"/>
+                                </span>
+                              </td>
+                            </tr>
+                          </t>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+              </div>
+              <script>
+                  var tiempoRestante = 30;
+                  document.title = "Kitchen";
+                  var contador = setInterval(function() {
+                      document.getElementById('timer').innerText = tiempoRestante;
+                      tiempoRestante--;
+                      if (tiempoRestante === 0) {
+                          clearInterval(contador);
+                          window.location.reload();
+                      }
+                  }, 1000);
+    
+                  function home_page() {
+                    window.location.href = '/';
+                  };
+
+                  function resfresh_page() {
+                    window.location.reload();
+                  };
+    
+                  function next_stage(order_id){
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('GET', `/next_stage?order_id=${order_id}`, true);
+                    xhr.onreadystatechange = function () {
+                      if (xhr.readyState === 4){
+                        if (xhr.status === 200) {
+                          setTimeout( resfresh_page, 1000);
+                          alert('Cambio enviado, presione OK para continuar');
+                        }
+                      }
+                    };
+                    xhr.send();
+                  };
+
+                  function previous_stage(order_id){
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('GET', `/previous_stage?order_id=${order_id}`, true);
+                    xhr.onreadystatechange = function () {
+                      if (xhr.readyState === 4){
+                        if (xhr.status === 200) {
+                          setTimeout( resfresh_page, 1000);
+                          alert('Cambio enviado, presione OK para continuar');
+                        }
+                      }
+                    };
+                    xhr.send();
+                  };
+                </script>
+          </t>
+      </template>
+  </data>
+  <data>
+    <template id="ptv_dispatch" name="template_ptv_dispatch">
+        <t t-call="web.html_container">
+            <button type="button" class="badge btn-primary btn-sm" style="font-weight:bold;width:100%;margin-top:5px">
+                <h1>DISPATCHER</h1>
+            </button>
+            <div class="container-fluid" style="padding:0px">
+                <button type="button" class="badge btn-primary btn-sm" style="font-weight:bold;margin-top:5px;margin-bottom:5px" onclick="resfresh_page()" title="Refresh">REFRESH</button>
+                <button type="button" class="badge btn-primary btn-sm" id="timer" style="font-weight:bold;margin-top:5px;margin-bottom:5px" onclick="resfresh_page()" title="Refresh"></button>
+                <button type="button" class="badge btn-primary btn-sm" style="font-weight:bold;margin-top:5px;margin-bottom:5px" onclick="home_page()" title="Go Home">🌍</button>
+                <div style="display:flex;flex-flow: row wrap;justify-content:flex-start">
+                  <div t-foreach="orders" t-as="order" style="align-self:flex-start;margin:3px;">
+                    <table class="table table-sm table-hover table-borderless table-warning" style="cursor:pointer;border-style:dashed;border-width:2px;border-color:gray;opacity: 0.8; min-height:170px; min-width:180px;">
+                      <caption style="background-color: #fff3cd;padding:3px;margin-top:3px;border-style:dashed;border-width:2px">
+                        <button type="button" class="badge btn-primary btn-sm" style="font-weight:bold">
+                          <t t-esc="order[1]"/>
+                        </button>
+                        <t t-if="order[2] == 'REQUIRED'">
+                          <button type="button" class="badge btn-danger btn-sm" style="font-weight:bold" disabled="disabled">
+                            <t t-esc="order[2]"/>
+                          </button>
+                        </t>
+                        <t t-if="order[2] == 'PREPARING'">
+                          <button type="button" class="badge btn-warning btn-sm" style="font-weight:bold" disabled="disabled">
+                            <t t-esc="order[2]"/>
+                          </button>
+                        </t>
+                        <t t-if="order[2] == 'RETURNED'">
+                          <button type="button" class="badge btn-dark btn-sm" style="font-weight:bold" disabled="disabled">
+                            <t t-esc="order[2]"/>
+                          </button>
+                        </t>
+                        <t t-if="order[2] == 'READY'">
+                          <button type="button" class="badge btn-info btn-sm" style="font-weight:bold" disabled="disabled">
+                            <t t-esc="order[2]"/>
+                          </button>
+                        </t>
+                        <t t-if="order[2] == 'DISPATCHED'">
+                          <button type="button" class="badge btn-success btn-sm" style="font-weight:bold" disabled="disabled">
+                            <t t-esc="order[2]"/>
+                          </button>
+                        </t>
+                        <t t-if="order[2] == 'ENDED'">
+                          <button type="button" class="badge btn-link btn-sm" style="font-weight:bold" disabled="disabled">
+                            <t t-esc="order[2]"/>
+                          </button>
+                        </t>
+                        <span class="badge bg-primary" style="cursor:pointer;border-color:black;font-size: 0.7rem;background-color: #71639e !important" title="Ubicación"> <t t-esc="order[5]"/> </span>
+                        <span class="btn btn-link" style="width:100%;font-size: 0.7rem;text-align:left;padding:0px"> <t t-esc="order[4]"/> </span>
+                        <div style="display:flex;flex-flow: row wrap;justify-content:space-evenly">
+                          <span class="badge bg-danger rounded-pill" t-attf-onclick="previous_stage({{order[0]}})" style="width:50%;cursor:pointer;font-size: 0.7rem;border-color:black;border-style:solid;border-width:1px"> Anterior </span>
+                          <span class="badge bg-success rounded-pill" t-attf-onclick="next_stage({{order[0]}})" style="width:50%;cursor:pointer;font-size: 0.7rem;border-color:black;border-style:solid;border-width:1px"> Siguiente </span>
+                        </div>
+                      </caption>
+                      <tbody>
+                        <t t-foreach="order[3]" t-as="pedido">
+                          <tr>
+                            <td>
+                              <span class="badge bg-primary rounded-pill" style="font-size: 0.8rem;">
+                                <t t-esc="int(pedido.product_qty)"/>
+                              </span>
+                            </td>
+                            <td>
+                              <span style="font-family: 'Roboto';font-size: 0.8rem;"><t t-esc="pedido.name"/></span>
+                            </td>
+                          </tr>
+                        </t>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+            </div>
+            <script>
+                var tiempoRestante = 30;
+                document.title = "Dispatcher";
+                var contador = setInterval(function() {
+                    document.getElementById('timer').innerText = tiempoRestante;
+                    tiempoRestante--;
+                    if (tiempoRestante === 0) {
+                        clearInterval(contador);
+                        window.location.reload();
+                    }
+                }, 1000);
+  
+                function home_page() {
+                  window.location.href = '/';
+                };
+
+                function resfresh_page() {
+                  window.location.reload();
+                };
+  
+                function next_stage(order_id){
+                  var xhr = new XMLHttpRequest();
+                  xhr.open('GET', `/next_stage?order_id=${order_id}`, true);
+                  xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4){
+                      if (xhr.status === 200) {
+                        setTimeout( resfresh_page, 1000);
+                        alert('Cambio enviado, presione OK para continuar');
+                      }
+                    }
+                  };
+                  xhr.send();
+                };
+
+                function previous_stage(order_id){
+                  var xhr = new XMLHttpRequest();
+                  xhr.open('GET', `/previous_stage?order_id=${order_id}`, true);
+                  xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4){
+                      if (xhr.status === 200) {
+                        setTimeout( resfresh_page, 1000);
+                        alert('Cambio enviado, presione OK para continuar');
+                      }
+                    }
+                  };
+                  xhr.send();
+                };
+              </script>
+        </t>
+    </template>
+  </data>
+  <data>
+    <template id="ptv_viewer" name="template_ptv_viewer">
+        <t t-call="web.html_container">
+            <button type="button" class="badge btn-primary btn-sm" style="font-weight:bold;width:100%;margin-top:5px">
+                <h1>AUTOPEDIDO</h1>
+            </button>
+            <div class="container-fluid" style="padding:0px">
+                <button type="button" class="badge btn-primary btn-sm" style="font-weight:bold;margin-top:5px;margin-bottom:5px" onclick="resfresh_page()" title="Refresh">REFRESH</button>
+                <button type="button" class="badge btn-primary btn-sm" id="timer" style="font-weight:bold;margin-top:5px;margin-bottom:5px" onclick="resfresh_page()" title="Refresh"></button>
+                <button type="button" class="badge btn-primary btn-sm" style="font-weight:bold;margin-top:5px;margin-bottom:5px" onclick="home_page()" title="Go Home">🌍</button>
+
+                <div style="display:flex;flex-flow: row wrap;justify-content:space-evenly">
+                  <table class="table" style="box-shadow: 5px 5px 7px rgba(33,33,33,.7);">
+                    <thead>
+                      <th>Orden</th>
+                      <th>Estado</th>
+                      <th>Cliente</th>
+                      <th>Función</th>
+                    </thead>
+                    <tbody>
+                      <t t-foreach="orders" t-as="order">
+                        <tr>
+                          <td>
+                            <span style="font-family: 'Roboto';font-size: 0.8rem;"><t t-esc="order[1]"/></span>
+                          </td>
+                          <td>
+                            <t t-if="order[2] == 'REQUIRED'">
+                              <button type="button" class="badge btn-danger btn-sm" style="font-weight:bold" disabled="disabled">
+                                <t t-esc="order[2]"/>
+                              </button>
+                            </t>
+                            <t t-if="order[2] == 'PREPARING'">
+                              <button type="button" class="badge btn-warning btn-sm" style="font-weight:bold" disabled="disabled">
+                                <t t-esc="order[2]"/>
+                              </button>
+                            </t>
+                            <t t-if="order[2] == 'RETURNED'">
+                              <button type="button" class="badge btn-dark btn-sm" style="font-weight:bold" disabled="disabled">
+                                <t t-esc="order[2]"/>
+                              </button>
+                            </t>
+                            <t t-if="order[2] == 'READY'">
+                              <button type="button" class="badge btn-info btn-sm" style="font-weight:bold" disabled="disabled">
+                                <t t-esc="order[2]"/>
+                              </button>
+                            </t>
+                            <t t-if="order[2] == 'DISPATCHED'">
+                              <button type="button" class="badge btn-success btn-sm" style="font-weight:bold" disabled="disabled">
+                                <t t-esc="order[2]"/>
+                              </button>
+                            </t>
+                            <t t-if="order[2] == 'ENDED'">
+                              <button type="button" class="badge btn-link btn-sm" style="font-weight:bold" disabled="disabled">
+                                <t t-esc="order[2]"/>
+                              </button>
+                            </t>
+                          </td>
+                          <td>
+                            <span style="font-family: 'Roboto';font-size: 0.8rem;"><t t-esc="order[4]"/></span>
+                          </td>
+                          <td>
+                            <t t-if="order[2] == 'PENDING'">
+                              <button type="button" class="badge btn-success btn-sm" style="font-weight:bold" t-attf-onclick="proceed({{order[0]}})" title="Enviar a cocina">
+                                ♨️ Siguiente
+                              </button>
+                            </t>
+                            <t t-else="">
+                              <div class="spinner-border spinner-border-sm"></div>
+                            </t>
+                          </td>
+                        </tr>
+                      </t>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="container mt-5">
+                    <hr/>
+                    <ol style="padding:0px;margin:0px;display:flex;flex-direction:row;justify-content:space-evenly;list-style:none;">
+                      <li>
+                        <span class="badge bg-danger rounded-pill" style="font-size:10px;font-weight:bold">Required</span>
+                      </li>
+                      <li>
+                        <span class="badge bg-warning rounded-pill" style="font-size:10px;font-weight:bold">Preparing</span>
+                      </li>
+                      <li>
+                        <span class="badge bg-info rounded-pill" style="font-size:10px;font-weight:bold">Ready</span>
+                      </li>
+                      <li>
+                        <span class="badge bg-success rounded-pill" style="font-size:10px;font-weight:bold">Dispatched</span>
+                      </li>
+                      <li>
+                        <span class="badge bg-dark rounded-pill" style="font-size:10px;font-weight:bold">Ended</span>
+                      </li>
+                    </ol>
+                </div>
+            </div>
+            <script>
+                var tiempoRestante = 30;
+                document.title = "Autopedido";
+                var contador = setInterval(function() {
+                    document.getElementById('timer').innerText = tiempoRestante;
+                    tiempoRestante--;
+                    if (tiempoRestante === 0) {
+                        clearInterval(contador);
+                        window.location.reload();
+                    }
+                }, 1000);
+
+                function proceed(order_id){
+                  var xhr = new XMLHttpRequest();
+                  xhr.open('GET', `/proceed?order_id=${order_id}`, true);
+                  xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4){
+                      if (xhr.status === 200) {
+                        setTimeout( resfresh_page, 1000);
+                        //alert('Cambio enviado, presione OK para continuar');
+                        //console.log('Respuesta:', JSON.parse(xhr.responseText));
+                      }
+                    }
+                  };
+                  xhr.send();
+                };
+
+                function home_page() {
+                  window.location.href = '/';
+                };
+
+                function resfresh_page() {
+                  window.location.reload();
+                };
+              </script>
+        </t>
+    </template>
+  </data>
+  <data>
+    <template id="ptv_viewer_form" name="template_ptv_viewer_one">
+        <t t-call="web.html_container">
+            <button type="button" class="badge btn-primary btn-sm" style="font-weight:bold;width:100%;margin-top:5px">
+                <h1>BUSCAR ORDEN</h1>
+            </button>
+            <div class="container-fluid" style="padding:0px">
+                <button type="button" class="badge btn-primary btn-sm" style="font-weight:bold;margin-top:5px;margin-bottom:5px" onclick="home_page()" title="Go Home">🌍</button>
+                <div style="display:flex;flex-flow: row wrap;justify-content:space-evenly">
+                  <div class="container mt-5">
+                    <form method="GET" action="/viewer">
+                      <div class="form-group" style="display:flex;flex-flow: row wrap;justify-content:space-evenly">
+                        <input class="form-control mr-2" type="text" name="order_name" placeholder="Ingrese su número de orden" required="required" style="flex: 1; max-width: 70%;"/>
+                        <input type="submit" class="btn btn-primary" value="Ver" style="flex: 0 0 auto;" />
+                      </div>
+                    </form>
+                    <hr/>
+                  </div>
+                  <table class="table" style="box-shadow: 5px 5px 7px rgba(33,33,33,.7);">
+                    <thead>
+                      <th>Orden</th>
+                      <th>Estado</th>
+                      <th>Cliente</th>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+                </div>
+            </div>
+            <script>
+              document.title = "Buscador";
+              function home_page() {
+                window.location.href = '/';
+              };
+            </script>
+        </t>
+    </template>
+  </data> 
+</odoo>
